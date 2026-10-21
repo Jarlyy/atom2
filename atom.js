@@ -40,39 +40,84 @@ function create_electron(curve, start, scene) {
     scene.add(particle)
     return particle
 }
-function create_s_orbital(radius = 2) {
-    const curve = new THREE.ArcCurve(0,0,radius);
+function create_s_orbital(radius = 2, axis) {
+    const curve = new THREE.ArcCurve(0,0,radius); 
     const geometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(64))
     const mat = new THREE.LineBasicMaterial({ color: orbital_color });
     const orbital = new THREE.LineLoop(geometry, mat);
     scene.add(orbital);
     return curve;
 }
+function arrange_particles(protons, neutrons) {
+    let particles = [];
+    const particles_count = protons + neutrons;
+    const radius = Math.pow(particles_count, 1/3) * 1.2
+    let to_create = [];
+    for(let i = 0; i<protons; i++) to_create.push(proton_color)
+    for(let i = 0; i<neutrons; i++) to_create.push(neutron_color)
+    let search_radius = 2.5;
+    for(let color of to_create) {  //for each particle to create
+        let placed = 0;
+        let attempts = 0;
+        while(!placed) {   //trying to place particle
+            attempts ++ 
+            if(attempts>100) {  //increase search radius if too many attemps
+                search_radius += 0.5
+                attempts = 0;
+            }
+            const u = Math.random();
+            const v = Math.random();
+            const theta = u * 2.0 * Math.PI;
+            const phi = Math.acos(2.0 * v - 1.0);
+            const r = Math.cbrt(Math.random()) * search_radius;
+
+            const x = r * Math.sin(phi) * Math.cos(theta);
+            const y = r * Math.sin(phi) * Math.sin(theta);
+            const z = r * Math.cos(phi);
+            let enought_length = true;
+            for(let particle of particles) {  //colision check
+                const dist = Math.sqrt(Math.pow(particle[0] - x, 2) + Math.pow(particle[1] -y, 2) + Math.pow(particle[2] - z, 2))
+                if(dist<3.8) {
+                    enought_length = false;
+                    break;
+                }
+            }
+            if (enought_length) {
+                particles.push([x,y,z,color]); 
+                placed = true;
+            }
+        }
+    }
+    for(let el of particles) {
+        create_particle(el[0], el[1], el[2], el[3])
+    }
+    console.log('+')
+    return particles;
+}
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 function render1() {
     electrons.clear();
     scene.clear();
-    create_particle(0,0,0,proton_color)
+    // create_particle(0,0,0,proton_color)
+    arrange_particles(1,0)
     const curve = create_s_orbital(10);
 
     electrons.set(create_electron(curve, 0, scene), [curve, 0]);
-    return curve
 }
 
 function render2() {
     electrons.clear();
     scene.clear();
-    const curve = render1()
-    create_particle(2,0,0,neutron_color)
+    const curve = create_s_orbital(10);
+    arrange_particles(2,2);
     electrons.set(create_electron(curve,0.5,scene), [curve, 0.5])
-
+    electrons.set(create_electron(curve,1,scene), [curve, 1])
 }
-function randint(min, max) {
-  // случайное число от min до (max+1)
-  let rand = min + Math.random() * (max + 1 - min);
-  return Math.floor(rand);
-}
-
 
 function animate() {
     requestAnimationFrame(animate);  
@@ -96,10 +141,13 @@ function close_dialog() {
 const he = document.getElementById('he');
 he.addEventListener('click', render2);
 he.addEventListener('click', close_dialog);
+he.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Helium'});
 
 
 const h = document.getElementById('h');
 h.addEventListener('click', render1);
 h.addEventListener('click', close_dialog);
+h.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Hydrogen'});
+
 render1();
 animate()
