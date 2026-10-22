@@ -45,6 +45,9 @@ function create_s_orbital(radius = 2, axis) {
     const geometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(64))
     const mat = new THREE.LineBasicMaterial({ color: orbital_color });
     const orbital = new THREE.LineLoop(geometry, mat);
+    if(axis == 'x') {
+        orbital.rotateY(Math.PI/2);
+    }
     scene.add(orbital);
     return curve;
 }
@@ -118,7 +121,16 @@ function render2() {
     electrons.set(create_electron(curve,0.5,scene), [curve, 0.5])
     electrons.set(create_electron(curve,1,scene), [curve, 1])
 }
-
+function render3() {
+    electrons.clear();
+    scene.clear();
+    const s1 = create_s_orbital(10);
+    const s2 = create_s_orbital(12, 'x');
+    arrange_particles(3,4)
+    electrons.set(create_electron(s1,0.5,scene), [s1, 0.5])
+    electrons.set(create_electron(s1,1,scene), [s1, 1])
+    electrons.set(create_electron(s2,0.5,scene), [s2, 0.5])
+}
 function animate() {
     requestAnimationFrame(animate);  
     for (const [electron, array] of electrons) {
@@ -148,6 +160,11 @@ const h = document.getElementById('h');
 h.addEventListener('click', render1);
 h.addEventListener('click', close_dialog);
 h.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Hydrogen'});
+
+const Li = document.getElementById('Li');
+Li.addEventListener('click', render3);
+Li.addEventListener('click', close_dialog);
+Li.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Lithium'});
 
 render1();
 animate()
