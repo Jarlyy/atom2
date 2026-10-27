@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { Line2 } from 'three/addons/lines/Line2.js';
+import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 //initial setup
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -9,6 +12,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 camera.position.z = 30;
+camera.position.y = 20;
 camera.lookAt(0,0,0);
 //control
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -18,7 +22,7 @@ controls.enablePan = false;
 const electron_color = "#75aafa"
 const proton_color = "#bd112e"
 const neutron_color = "#b8bab9"
-const orbital_color = "#ffffff"
+const orbital_color = "#787b80"
 
 let electrons = new Map();
 
@@ -53,19 +57,25 @@ function create_s_orbital(radius = 2, axis = 'y') {
             points_rotated.push(new THREE.Vector3(0, point.y, point.x));
         }
     }
-    else if(axis =='y'){
+    else if(axis =='z'){
         for(let point of curve_raw.getPoints(64)) {
             points_rotated.push(new THREE.Vector3(point.x, point.y, 0));
         }
+    } else {
+        for(let point of curve_raw.getPoints(64)) {
+            points_rotated.push(new THREE.Vector3(point.x, 0, point.y))
+        }
     }
     const curve = new THREE.CatmullRomCurve3(points_rotated,true);
-    const geometry = new THREE.BufferGeometry().setFromPoints(points_rotated)
-    const mat = new THREE.LineBasicMaterial({ color: orbital_color });
-    const orbital = new THREE.LineLoop(geometry, mat);
-    const speed = 0.05 /radius;
+    //const geometry = new THREE.BufferGeometry().setFromPoints(points_rotated)
+    const geometry = new LineGeometry();
+    geometry.setFromPoints(points_rotated)
+    const mat = new LineMaterial({ color: orbital_color,linewidth: 5});
+    const orbital = new Line2(geometry, mat);
+    const speed = 0.02 /radius;
     scene.add(orbital);
     console.log('+')
-    points_rotated = curve.getSpacedPoints(200)
+    points_rotated = curve.getSpacedPoints(100*radius)
     return [points_rotated, speed];
 }
 
@@ -117,13 +127,13 @@ function create_p_orbital(len, axis = 'x') {
     const line2 = new THREE.LineCurve3(points_rotated_2[points_rotated_2.length-1], points_rotated[0])
     const points_all = points_rotated.concat(line1.getPoints(100)).concat(points_rotated_2).concat(line2.getPoints(100))
     const curve = new THREE.CatmullRomCurve3(points_all)
-    const mat = new THREE.LineBasicMaterial({ color: orbital_color });
-    const curve_points = curve.getSpacedPoints(300)
-    const geometry = new THREE.BufferGeometry().setFromPoints(curve_points);
-    const orbital = new THREE.LineLoop(geometry, mat);
+    const mat = new LineMaterial({ color: orbital_color, linewidth: 5});
+    const curve_points = curve.getSpacedPoints(100*len)
+    const geometry = new LineGeometry().setFromPoints(curve_points);
+    const orbital = new Line2(geometry, mat);
     scene.add(orbital);
     
-    return [curve_points, 0.05/len];
+    return [curve_points, 0.02/len];
 }
 
 
@@ -186,7 +196,7 @@ function render_H() {
     scene.clear();
     // create_particle(0,0,0,proton_color)
     arrange_particles(1,0)
-    const list = create_s_orbital(10);
+    const list = create_s_orbital(15);
     const curve = list[0];
     const speed = list[1]
     electrons.set(create_electron(curve), [curve, 0,speed]);
@@ -195,7 +205,7 @@ function render_H() {
 function render_He() {
     electrons.clear();
     scene.clear();
-    const list = create_s_orbital(10);
+    const list = create_s_orbital(15);
     const speed = list[1];
     const curve = list[0];
     arrange_particles(2,2);
@@ -205,10 +215,10 @@ function render_He() {
 function render_Li() {
     electrons.clear();
     scene.clear();
-    const l1 = create_s_orbital(10);
+    const l1 = create_s_orbital(15);
     const s1 = l1[0];
     const speed1 = l1[1];
-    const l2 = create_s_orbital(12, 'x');
+    const l2 = create_s_orbital(25);
     const s2 = l2[0];
     const speed2 = l2[1];
     arrange_particles(3,4)
@@ -223,7 +233,7 @@ function render_Be() {
     const l1 = create_s_orbital(15);
     const s1 = l1[0];
     const speed1 = l1[1];
-    const l2 = create_s_orbital(17, 'x');
+    const l2 = create_s_orbital(25);
     const s2 = l2[0];
     const speed2 = l2[1];
     electrons.set(create_electron(s1,0), [s1,0, speed1])
@@ -238,10 +248,10 @@ function render_B() {
     const l1 = create_s_orbital(15);
     const s1 = l1[0];
     const speed1 = l1[1];
-    const l2 = create_s_orbital(17, 'x');
+    const l2 = create_s_orbital(25);
     const s2 = l2[0];
     const speed2 = l2[1];
-    const l3 = create_p_orbital(15)
+    const l3 = create_p_orbital(20)
     const p2 = l3[0];
     const speed_2p = l3[1]
     electrons.set(create_electron(s1,0), [s1,0, speed1])
@@ -257,18 +267,20 @@ function render_C() {
     const l1 = create_s_orbital(15);
     const points_s1 = l1[0];
     const speed1 = l1[1];
-    const l2 = create_s_orbital(17, 'x');
+    const l2 = create_s_orbital(25);
     const points_s2 = l2[0];
     const speed2 = l2[1];
-    const l3 = create_p_orbital(15)
-    const points_p2 = l3[0];
-    const speed_2p = l3[1]
+    let l2p = create_p_orbital(20)
+    const points_2p = l2p[0];
+    const speed_2p = l2p[1]
+    l2p = create_p_orbital(20,'y')
+    const points_2py = l2p[0]
     electrons.set(create_electron(points_s1,0), [points_s1,0, speed1])
     electrons.set(create_electron(points_s1,0.5), [points_s1, 0.5, speed1])
     electrons.set(create_electron(points_s2,0), [points_s2, 0,speed2])
     electrons.set(create_electron(points_s2,0.5), [points_s2,0.5, speed2])
-    electrons.set(create_electron(points_p2), [points_p2,0.5, speed_2p])
-    electrons.set(create_electron(points_p2), [points_p2,0, speed_2p])
+    electrons.set(create_electron(), [points_2p,0, speed_2p])
+    electrons.set(create_electron(), [points_2py,0.5, speed_2p])
 
 
 }
@@ -279,21 +291,21 @@ function render_N() {
     const l1 = create_s_orbital(15);
     const points_1s = l1[0];
     const speed1 = l1[1];
-    const l2s = create_s_orbital(17, 'x');
+    const l2s = create_s_orbital(25);
     const points_2s = l2s[0];
     const speed2 = l2s[1];
-    let l2p = create_p_orbital(15)
+    let l2p = create_p_orbital(20)
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
-    l2p = create_p_orbital[15,'y']
-    const points_2py = l2p[0]
+    const points_2py = create_p_orbital(20,'y')[0]
+    const points_2pz = create_p_orbital(20,'z')[0]
     electrons.set(create_electron(), [points_1s,0, speed1])
     electrons.set(create_electron(), [points_1s, 0.5, speed1])
     electrons.set(create_electron(), [points_2s, 0,speed2])
     electrons.set(create_electron(), [points_2s,0.5, speed2])
-    electrons.set(create_electron(), [points_2p,0.5, speed_2p])
     electrons.set(create_electron(), [points_2p, 0, speed_2p])
     electrons.set(create_electron(), [points_2py, 0, speed_2p])
+    electrons.set(create_electron(), [points_2pz, 0, speed_2p])
 }
 
 function render_O() {
@@ -303,48 +315,49 @@ function render_O() {
     const l1 = create_s_orbital(15);
     const points_1s = l1[0];
     const speed1 = l1[1];
-    const l2s = create_s_orbital(17, 'x');
+    const l2s = create_s_orbital(25);
     const points_2s = l2s[0];
     const speed2 = l2s[1];
-    let l2p = create_p_orbital(15)
+    let l2p = create_p_orbital(20)
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
-    l2p = create_p_orbital[15,'y']
-    const points_2py = l2p[0]
+    const points_2py = create_p_orbital(20,'y')[0]
+    const points_2pz = create_p_orbital(20,'z')[0]
     electrons.set(create_electron(), [points_1s,0, speed1])
     electrons.set(create_electron(), [points_1s, 0.5, speed1])
     electrons.set(create_electron(), [points_2s, 0,speed2])
     electrons.set(create_electron(), [points_2s,0.5, speed2])
-    electrons.set(create_electron(), [points_2p,0.5, speed_2p])
     electrons.set(create_electron(), [points_2p, 0, speed_2p])
+    electrons.set(create_electron(), [points_2p, 0.5, speed_2p])
     electrons.set(create_electron(), [points_2py, 0, speed_2p])
-    electrons.set(create_electron(), [points_2py, 0.5, speed_2p])
+    electrons.set(create_electron(), [points_2pz, 0, speed_2p])
 
 
 }
 function render_F() {
     electrons.clear();
     scene.clear();
-    arrange_particles(8,8)
+    arrange_particles(9,10)
     const l1 = create_s_orbital(15);
     const points_1s = l1[0];
     const speed1 = l1[1];
-    const l2s = create_s_orbital(17, 'x');
+    const l2s = create_s_orbital(25);
     const points_2s = l2s[0];
     const speed2 = l2s[1];
-    let l2p = create_p_orbital(15)
+    let l2p = create_p_orbital(20)
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
-    l2p = create_p_orbital[15,'y']
-    const points_2py = l2p[0]
+    const points_2py = create_p_orbital(20,'y')[0]
+    const points_2pz = create_p_orbital(20,'z')[0]
     electrons.set(create_electron(), [points_1s,0, speed1])
     electrons.set(create_electron(), [points_1s, 0.5, speed1])
     electrons.set(create_electron(), [points_2s, 0,speed2])
     electrons.set(create_electron(), [points_2s,0.5, speed2])
-    electrons.set(create_electron(), [points_2p,0.5, speed_2p])
     electrons.set(create_electron(), [points_2p, 0, speed_2p])
+    electrons.set(create_electron(), [points_2p, 0.5, speed_2p])
     electrons.set(create_electron(), [points_2py, 0, speed_2p])
     electrons.set(create_electron(), [points_2py, 0.5, speed_2p])
+    electrons.set(create_electron(), [points_2pz, 0, speed_2p])
 
 
 }
@@ -355,23 +368,24 @@ function render_Ne() {
     const l1 = create_s_orbital(15);
     const points_1s = l1[0];
     const speed1 = l1[1];
-    const l2s = create_s_orbital(17, 'x');
+    const l2s = create_s_orbital(25);
     const points_2s = l2s[0];
     const speed2 = l2s[1];
-    let l2p = create_p_orbital(15)
+    let l2p = create_p_orbital(20)
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
-    l2p = create_p_orbital[15,'y']
-    const points_2py = l2p[0]
+    const points_2py = create_p_orbital(20,'y')[0]
+    const points_2pz = create_p_orbital(20,'z')[0]
     electrons.set(create_electron(), [points_1s,0, speed1])
     electrons.set(create_electron(), [points_1s, 0.5, speed1])
     electrons.set(create_electron(), [points_2s, 0,speed2])
     electrons.set(create_electron(), [points_2s,0.5, speed2])
-    electrons.set(create_electron(), [points_2p,0.5, speed_2p])
     electrons.set(create_electron(), [points_2p, 0, speed_2p])
+    electrons.set(create_electron(), [points_2p, 0.5, speed_2p])
     electrons.set(create_electron(), [points_2py, 0, speed_2p])
     electrons.set(create_electron(), [points_2py, 0.5, speed_2p])
-
+    electrons.set(create_electron(), [points_2pz, 0, speed_2p])
+    electrons.set(create_electron(), [points_2pz, 0.5, speed_2p])
 
 }
 function render_Na() {
