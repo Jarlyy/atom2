@@ -4,12 +4,22 @@ import { Line2 } from 'three/addons/lines/Line2.js';
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 //initial setup
+const mycanvas = document.querySelector('#canvas');
+const wraper = mycanvas.parentElement;
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
+const camera = new THREE.PerspectiveCamera(75, wraper.clientWidth/ wraper.clientHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({canvas: mycanvas, antialias:true});
+renderer.setSize(wraper.clientWidth, wraper.clientHeight)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+function resize() {
+    const width = wraper.clientWidth;
+    const height = wraper.clientHeight;
+    camera.aspect = width/height
 
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+    renderer.setSize(width,height)
+    camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
 
 camera.position.z = 30;
 camera.position.y = 20;
