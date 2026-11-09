@@ -52,6 +52,9 @@ html, body {
     background-color:black;
     padding: 20px;
 }
+.properties_window_wraper.hidden {
+    display: none;
+}
 .properties_window {
     border-radius: 30px;
     width: 100%;
@@ -99,5 +102,16 @@ html, body {
     border:2px solid #265299;
     color: white;
 }
+#show_properties_button {
+    position: absolute;
+    height: 20px;
+    background-color: white;
+    width: 20px;
+    right:10px;
+    display: none;
+    align-items: center;
+    text-align: center;
+}
+
 
  

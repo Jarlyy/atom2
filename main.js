@@ -20,7 +20,19 @@ function resize() {
     camera.updateProjectionMatrix();
 }
 window.addEventListener('resize', resize);
-
+resize()
+const properties_wraper = document.querySelector('.properties_window_wraper')
+const show_properties_button = document.querySelector('#show_properties_button')
+document.querySelector('#properties_hide_button').addEventListener("click", () => {
+    properties_wraper.classList.add('hidden')
+    //resize();
+    show_properties_button.style.display = "block";
+});
+show_properties_button.addEventListener('click',() => {
+    properties_wraper.classList.remove('hidden')
+    show_properties_button.style.display = 'none';
+    //requestAnimationFrame(()=>{resize()})
+})
 camera.position.z = 30;
 camera.position.y = 20;
 camera.lookAt(0,0,0);
@@ -374,7 +386,7 @@ function render_F() {
 function render_Ne() {
     electrons.clear();
     scene.clear();
-    arrange_particles(8,8)
+    arrange_particles(10,10)
     const l1 = create_s_orbital(15);
     const points_1s = l1[0];
     const speed1 = l1[1];
@@ -396,23 +408,25 @@ function render_Ne() {
     electrons.set(create_electron(), [points_2py, 0.5, speed_2p])
     electrons.set(create_electron(), [points_2pz, 0, speed_2p])
     electrons.set(create_electron(), [points_2pz, 0.5, speed_2p])
-
+    electrons.set(create_electron(), [points_2pz, 0, speed_2p])
 }
 function render_Na() {
     electrons.clear();
     scene.clear();
-    arrange_particles(8,8)
+    arrange_particles(11,12)
     const l1 = create_s_orbital(15);
     const points_1s = l1[0];
     const speed1 = l1[1];
-    const l2s = create_s_orbital(17, 'x');
+    const l2s = create_s_orbital(25);
     const points_2s = l2s[0];
     const speed2 = l2s[1];
-    let l2p = create_p_orbital(15)
+    let l2p = create_p_orbital(20)
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
-    l2p = create_p_orbital[15,'y']
-    const points_2py = l2p[0]
+    const points_2py = create_p_orbital(15,'y')[0]
+    const l3s = create_s_orbital(35)
+    const points_3s = l3s[0];
+    const speed_3s = l3s[1]
     electrons.set(create_electron(), [points_1s,0, speed1])
     electrons.set(create_electron(), [points_1s, 0.5, speed1])
     electrons.set(create_electron(), [points_2s, 0,speed2])
@@ -421,10 +435,6 @@ function render_Na() {
     electrons.set(create_electron(), [points_2p, 0, speed_2p])
     electrons.set(create_electron(), [points_2py, 0, speed_2p])
     electrons.set(create_electron(), [points_2py, 0.5, speed_2p])
-}
-const dialog = document.getElementById('selection_menu');
-function close_dialog() {
-    dialog.close()
 }
 
 //animation_function (used in the end)
@@ -435,7 +445,6 @@ function animate() {
         const points_array = array[0]
         const speed = array[2];
         const pos = points_array[Math.floor(point * points_array.length)]
-        console.log(typeof pos)
         //pos = curve.getPointAt(point);
         electron.position.set(pos.x, pos.y, pos.z);
         let next_point = (point+speed) % 1
@@ -447,61 +456,85 @@ function animate() {
     controls.update();
     renderer.render(scene, camera);
 }
+ 
+const dialog = document.querySelector('#selection_menu')
+const el_name = document.querySelector('.el_name');
 
-const h = document.getElementById('h');
-h.addEventListener('click', render_H);
-h.addEventListener('click', close_dialog);
-h.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Hydrogen'});
+document.getElementById('h').addEventListener('click',() =>
+{
+    dialog.close();
+    el_name.textContent = 'Hydrogen';
+    render_H();
+});
 
-const he = document.getElementById('he');
-he.addEventListener('click', render_He);
-he.addEventListener('click', close_dialog);
-he.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Helium'});
+document.getElementById('he').addEventListener('click', () =>
+{
+    dialog.close();
+    el_name.textContent = 'Helium'
+    render_H();
+});
 
-const Li = document.getElementById('Li');
-Li.addEventListener('click', render_Li);
-Li.addEventListener('click', close_dialog);
-Li.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Lithium'});
+document.getElementById('Li').addEventListener('click',() =>
+{
+    dialog.close();
+    el_name.textContent = 'Lithium'
+    render_Li();
+});
 
-const Be = document.getElementById('Be');
-Be.addEventListener('click', render_Be);
-Be.addEventListener('click', close_dialog);
-Be.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Beryllium'});
 
-const B = document.getElementById('B');
-B.addEventListener('click', render_B);
-B.addEventListener('click', close_dialog);
-B.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Boron'});
 
-const C = document.getElementById('C');
-C.addEventListener('click', render_C);
-C.addEventListener('click', close_dialog);
-C.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Carbon'});
+document.getElementById('Be').addEventListener('click', select_Be);
+function select_Be() {
+    dialog.close();
+    el_name.textContent = 'Beryllium'
+    render_Be();
+}
 
-const N = document.getElementById('N');
-N.addEventListener('click', render_N);
-N.addEventListener('click', close_dialog);
-N.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Nitrogen'});
+document.getElementById('B').addEventListener('click', select_B);
+function select_B() {
+    dialog.close();
+    el_name.textContent = 'Boron'
+    render_B()
+}
+
+document.getElementById('C').addEventListener('click', () => 
+{
+    dialog.close();
+    el_name.textContent = 'Carbon'
+    render_C();
+});
+
+document.getElementById('N').addEventListener('click',() =>
+{
+    dialog.close()
+    el_name.textContent = 'Nitrogen'
+    render_N();
+});
 
 const O = document.getElementById('O');
-O.addEventListener('click', render_O);
-O.addEventListener('click', close_dialog);
-O.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Oxygen'});
+O.addEventListener('click', () => {
+    dialog.close();
+    el_name.textContent = 'Oxygen'
+    render_O();
+});
 
-const F = document.getElementById('F');
-F.addEventListener('click', render_F);
-F.addEventListener('click', close_dialog);
-F.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Fluorine'});
+document.getElementById('F').addEventListener('click', () => {
+    dialog.close();
+    el_name.textContent = 'Fluorine'
+    render_F();
+});
 
-const Ne = document.getElementById('Ne');
-Ne.addEventListener('click', render_Ne);
-Ne.addEventListener('click', close_dialog);
-Ne.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Neon'});
+document.getElementById('Ne').addEventListener('click', () => {
+    dialog.close();
+    el_name.textContent = 'Neon'
+    render_Ne();
+});
 
-const Na = document.getElementById('Na');
-Na.addEventListener('click', render_Na);
-Na.addEventListener('click', close_dialog);
-Na.addEventListener('click', () => {document.getElementById('el_name').textContent = 'Natrium'});
+document.getElementById('Na').addEventListener('click', () => {
+    dialog.close();
+    el_name.textContent = 'Natrium'
+    render_Na();
+});
 
 render_H();
 animate()
