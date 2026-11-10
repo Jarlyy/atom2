@@ -12,7 +12,7 @@
   <body>
     <div id="page_container">
     <header id="header">
-      <p class="el_name" style="margin-left:20px; ">Hydrogen</p>
+      <p class="el_name" id="main_el_name">Hydrogen</p>
       <div id="el_selector" onclick="document.getElementById('selection_menu').showModal()">Элемент</div>
     </header>
     <dialog id="selection_menu">
@@ -54,11 +54,13 @@
       </div>
       <div class="properties_window_wraper">
         <div class="properties_window">
-          <div id="properties_hide_button">-</div>
+          <h1 class="el_name" id="small_el_name">Hydrogen</h1>
+          <div>Electron configuration:<br>
+            <span class="electron_conf"></span>
+
+          </div>
         </div>
       </div>
-      <div id="show_properties_button">+</div>
-
       <script type="module" src="main.js"></script>
     </div>
     </div>

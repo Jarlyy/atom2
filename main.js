@@ -22,17 +22,24 @@ function resize() {
 window.addEventListener('resize', resize);
 resize()
 const properties_wraper = document.querySelector('.properties_window_wraper')
-const show_properties_button = document.querySelector('#show_properties_button')
-document.querySelector('#properties_hide_button').addEventListener("click", () => {
-    properties_wraper.classList.add('hidden')
-    //resize();
-    show_properties_button.style.display = "block";
+// const show_properties_button = document.querySelector('#show_properties_button')
+// document.querySelector('#properties_hide_button').addEventListener("click", () => {
+//     properties_wraper.classList.add('hidden')
+//     resize();
+//     show_properties_button.classList.remove("hidden")
+//     //show_properties_button.style.display = "block";
+// });
+// show_properties_button.addEventListener('click',() => {
+//     properties_wraper.classList.remove('hidden')
+//     show_properties_button.classList.add("hidden")
+//     //show_properties_button.style.display = 'none';
+//     //resize();
+//     requestAnimationFrame(() => resize());
+// })
+const resizeObserver = new ResizeObserver(() => {
+    resize();
 });
-show_properties_button.addEventListener('click',() => {
-    properties_wraper.classList.remove('hidden')
-    show_properties_button.style.display = 'none';
-    //requestAnimationFrame(()=>{resize()})
-})
+if (wraper) resizeObserver.observe(wraper);
 camera.position.z = 30;
 camera.position.y = 20;
 camera.lookAt(0,0,0);
@@ -98,7 +105,7 @@ function create_s_orbital(radius = 2, axis = 'y') {
     scene.add(orbital);
     console.log('+')
     points_rotated = curve.getSpacedPoints(100*radius)
-    return [points_rotated, speed];
+    return [points_rotated, speed, orbital];
 }
 
 
@@ -155,7 +162,7 @@ function create_p_orbital(len, axis = 'x') {
     const orbital = new Line2(geometry, mat);
     scene.add(orbital);
     
-    return [curve_points, 0.02/len];
+    return [curve_points, 0.02/len,orbital];
 }
 
 
@@ -213,121 +220,153 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+let orbitals_list = new Map();
+
 function render_H() {
     electrons.clear();
+    orbitals_list.clear();
     scene.clear();
     // create_particle(0,0,0,proton_color)
     arrange_particles(1,0)
     const list = create_s_orbital(15);
     const curve = list[0];
     const speed = list[1]
-    electrons.set(create_electron(curve), [curve, 0,speed]);
+    orbitals_list.set(list[2],'1s')
+    electrons.set(create_electron(curve), [curve, 0,speed,'1s']);
 }
 
 function render_He() {
     electrons.clear();
+    orbitals_list.clear();
     scene.clear();
     const list = create_s_orbital(15);
+    orbitals_list.set(list[2],'1s')
     const speed = list[1];
     const curve = list[0];
     arrange_particles(2,2);
-    electrons.set(create_electron(curve,0), [curve, 0,speed])
-    electrons.set(create_electron(curve,0.5), [curve, 0.5,speed])
+    electrons.set(create_electron(curve,0), [curve, 0,speed, '1s'])
+    electrons.set(create_electron(curve,0.5), [curve, 0.5,speed, '1s'])
 }
 function render_Li() {
     electrons.clear();
+    orbitals_list.clear();
     scene.clear();
     const l1 = create_s_orbital(15);
+    orbitals_list.set(l1[2],'1s')
     const s1 = l1[0];
     const speed1 = l1[1];
     const l2 = create_s_orbital(25);
+    orbitals_list.set(l2[2],'2s')
     const s2 = l2[0];
     const speed2 = l2[1];
     arrange_particles(3,4)
-    electrons.set(create_electron(s1,0.5), [s1, 0,speed1])
-    electrons.set(create_electron(s1,1), [s1, 0.5, speed1])
-    electrons.set(create_electron(s2,0), [s2, 0,speed2])
+    electrons.set(create_electron(s1,0.5), [s1, 0,speed1, '1s'])
+    electrons.set(create_electron(s1,1), [s1, 0.5, speed1,'1s'])
+    electrons.set(create_electron(s2,0), [s2, 0,speed2,'2s'])
 }
 function render_Be() {
     electrons.clear();
+    orbitals_list.clear();
     scene.clear();
     arrange_particles(4,5)
     const l1 = create_s_orbital(15);
     const s1 = l1[0];
     const speed1 = l1[1];
+    orbitals_list.set(l1[2],'1s')
     const l2 = create_s_orbital(25);
     const s2 = l2[0];
     const speed2 = l2[1];
-    electrons.set(create_electron(s1,0), [s1,0, speed1])
-    electrons.set(create_electron(s1,0.5), [s1, 0.5, speed1])
-    electrons.set(create_electron(s2,0), [s2, 0,speed2])
-    electrons.set(create_electron(s2,0), [s2,0.5, speed2])
+    orbitals_list.set(l2[2],'2s')
+
+    electrons.set(create_electron(s1,0), [s1,0, speed1,'1s'])
+    electrons.set(create_electron(s1,0.5), [s1, 0.5, speed1,'1s'])
+    electrons.set(create_electron(s2,0), [s2, 0,speed2,'2s'])
+    electrons.set(create_electron(s2,0), [s2,0.5, speed2,'2s'])
 }
 function render_B() {
     electrons.clear();
+    orbitals_list.clear();
     scene.clear();
     arrange_particles(4,5)
     const l1 = create_s_orbital(15);
+    orbitals_list.set(l1[2],'1s')
+
     const s1 = l1[0];
     const speed1 = l1[1];
     const l2 = create_s_orbital(25);
+    orbitals_list.set(l2[2],'2s')
+
     const s2 = l2[0];
     const speed2 = l2[1];
     const l3 = create_p_orbital(20)
+    orbitals_list.set(l3[2],'2p')
     const p2 = l3[0];
     const speed_2p = l3[1]
-    electrons.set(create_electron(s1,0), [s1,0, speed1])
-    electrons.set(create_electron(s1,0.5), [s1, 0.5, speed1])
-    electrons.set(create_electron(s2,0), [s2, 0,speed2])
-    electrons.set(create_electron(s2,0.5), [s2,0.5, speed2])
-    electrons.set(create_electron(p2,0.5), [p2,0.5, speed_2p])
+    electrons.set(create_electron(s1,0), [s1,0, speed1,'1s'])
+    electrons.set(create_electron(s1,0.5), [s1, 0.5, speed1,'1s'])
+    electrons.set(create_electron(s2,0), [s2, 0,speed2,'2s'])
+    electrons.set(create_electron(s2,0.5), [s2,0.5, speed2,'2s'])
+    electrons.set(create_electron(p2,0.5), [p2,0.5, speed_2p,'2p'])
 }
 function render_C() {
     electrons.clear();
+        orbitals_list.clear();
     scene.clear();
     arrange_particles(6,6)
     const l1 = create_s_orbital(15);
     const points_s1 = l1[0];
     const speed1 = l1[1];
+    orbitals_list.push(l1[2])
     const l2 = create_s_orbital(25);
+    orbitals_list.push(l2[2])
     const points_s2 = l2[0];
     const speed2 = l2[1];
     let l2p = create_p_orbital(20)
+    orbitals_list.push(l2p[2])
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
     l2p = create_p_orbital(20,'y')
+    orbitals_list.push(l2p[2])
     const points_2py = l2p[0]
-    electrons.set(create_electron(points_s1,0), [points_s1,0, speed1])
-    electrons.set(create_electron(points_s1,0.5), [points_s1, 0.5, speed1])
-    electrons.set(create_electron(points_s2,0), [points_s2, 0,speed2])
-    electrons.set(create_electron(points_s2,0.5), [points_s2,0.5, speed2])
-    electrons.set(create_electron(), [points_2p,0, speed_2p])
-    electrons.set(create_electron(), [points_2py,0.5, speed_2p])
+    electrons.set(create_electron(points_s1,0), [points_s1,0, speed1,'1s'])
+    electrons.set(create_electron(points_s1,0.5), [points_s1, 0.5, speed1,'1s'])
+    electrons.set(create_electron(points_s2,0), [points_s2, 0,speed2,'2s'])
+    electrons.set(create_electron(points_s2,0.5), [points_s2,0.5, speed2,'2s'])
+    electrons.set(create_electron(), [points_2p,0, speed_2p,'2p'])
+    electrons.set(create_electron(), [points_2py,0.5, speed_2p,'2p'])
 
 
 }
 function render_N() {
     electrons.clear();
+    orbitals_list.clear();
     scene.clear();
     arrange_particles(7,7)
     const l1 = create_s_orbital(15);
+    orbitals_list.push(l1[2])
     const points_1s = l1[0];
     const speed1 = l1[1];
     const l2s = create_s_orbital(25);
+      orbitals_list.push(l2s[2])
     const points_2s = l2s[0];
     const speed2 = l2s[1];
     let l2p = create_p_orbital(20)
+      orbitals_list.push(l2p[2])
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
-    const points_2py = create_p_orbital(20,'y')[0]
-    const points_2pz = create_p_orbital(20,'z')[0]
-    electrons.set(create_electron(), [points_1s,0, speed1])
-    electrons.set(create_electron(), [points_1s, 0.5, speed1])
-    electrons.set(create_electron(), [points_2s, 0,speed2])
-    electrons.set(create_electron(), [points_2s,0.5, speed2])
-    electrons.set(create_electron(), [points_2p, 0, speed_2p])
-    electrons.set(create_electron(), [points_2py, 0, speed_2p])
-    electrons.set(create_electron(), [points_2pz, 0, speed_2p])
+    l2p = create_p_orbital(20,'y')
+    const points_2py = l2p[0]
+      orbitals_list.push(l2p[2])
+    l2p = create_p_orbital(20,'z')
+    const points_2pz = l2p[0]
+      orbitals_list.push(l2p[2])
+    electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
+    electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
+    electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
+    electrons.set(create_electron(), [points_2s,0.5, speed2,'2s'])
+    electrons.set(create_electron(), [points_2p, 0, speed_2p,'2p'])
+    electrons.set(create_electron(), [points_2py, 0, speed_2p,'2p'])
+    electrons.set(create_electron(), [points_2pz, 0, speed_2p,'2p'])
 }
 
 function render_O() {
@@ -345,14 +384,14 @@ function render_O() {
     const speed_2p = l2p[1]
     const points_2py = create_p_orbital(20,'y')[0]
     const points_2pz = create_p_orbital(20,'z')[0]
-    electrons.set(create_electron(), [points_1s,0, speed1])
-    electrons.set(create_electron(), [points_1s, 0.5, speed1])
-    electrons.set(create_electron(), [points_2s, 0,speed2])
-    electrons.set(create_electron(), [points_2s,0.5, speed2])
-    electrons.set(create_electron(), [points_2p, 0, speed_2p])
-    electrons.set(create_electron(), [points_2p, 0.5, speed_2p])
-    electrons.set(create_electron(), [points_2py, 0, speed_2p])
-    electrons.set(create_electron(), [points_2pz, 0, speed_2p])
+    electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
+    electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
+    electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
+    electrons.set(create_electron(), [points_2s,0.5, speed2,'2s'])
+    electrons.set(create_electron(), [points_2p, 0, speed_2p,'2p'])
+    electrons.set(create_electron(), [points_2p, 0.5, speed_2p,'2p'])
+    electrons.set(create_electron(), [points_2py, 0, speed_2p,'2p'])
+    electrons.set(create_electron(), [points_2pz, 0, speed_2p,'2p'])
 
 
 }
@@ -371,15 +410,15 @@ function render_F() {
     const speed_2p = l2p[1]
     const points_2py = create_p_orbital(20,'y')[0]
     const points_2pz = create_p_orbital(20,'z')[0]
-    electrons.set(create_electron(), [points_1s,0, speed1])
-    electrons.set(create_electron(), [points_1s, 0.5, speed1])
-    electrons.set(create_electron(), [points_2s, 0,speed2])
-    electrons.set(create_electron(), [points_2s,0.5, speed2])
-    electrons.set(create_electron(), [points_2p, 0, speed_2p])
-    electrons.set(create_electron(), [points_2p, 0.5, speed_2p])
-    electrons.set(create_electron(), [points_2py, 0, speed_2p])
-    electrons.set(create_electron(), [points_2py, 0.5, speed_2p])
-    electrons.set(create_electron(), [points_2pz, 0, speed_2p])
+    electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
+    electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
+    electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
+    electrons.set(create_electron(), [points_2s,0.5, speed2,'2s'])
+    electrons.set(create_electron(), [points_2p, 0, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2p, 0.5, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2py, 0, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2py, 0.5, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2pz, 0, speed_2p, '2p'])
 
 
 }
@@ -398,17 +437,16 @@ function render_Ne() {
     const speed_2p = l2p[1]
     const points_2py = create_p_orbital(20,'y')[0]
     const points_2pz = create_p_orbital(20,'z')[0]
-    electrons.set(create_electron(), [points_1s,0, speed1])
-    electrons.set(create_electron(), [points_1s, 0.5, speed1])
-    electrons.set(create_electron(), [points_2s, 0,speed2])
-    electrons.set(create_electron(), [points_2s,0.5, speed2])
-    electrons.set(create_electron(), [points_2p, 0, speed_2p])
-    electrons.set(create_electron(), [points_2p, 0.5, speed_2p])
-    electrons.set(create_electron(), [points_2py, 0, speed_2p])
-    electrons.set(create_electron(), [points_2py, 0.5, speed_2p])
-    electrons.set(create_electron(), [points_2pz, 0, speed_2p])
-    electrons.set(create_electron(), [points_2pz, 0.5, speed_2p])
-    electrons.set(create_electron(), [points_2pz, 0, speed_2p])
+    electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
+    electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
+    electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
+    electrons.set(create_electron(), [points_2s,0.5, speed2,'2s'])
+    electrons.set(create_electron(), [points_2p, 0, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2p, 0.5, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2py, 0, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2py, 0.5, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2pz, 0, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2pz, 0.5, speed_2p, '2p'])
 }
 function render_Na() {
     electrons.clear();
@@ -424,19 +462,97 @@ function render_Na() {
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
     const points_2py = create_p_orbital(15,'y')[0]
+    const points_2pz = create_p_orbital(20,'z')[0]
     const l3s = create_s_orbital(35)
     const points_3s = l3s[0];
     const speed_3s = l3s[1]
-    electrons.set(create_electron(), [points_1s,0, speed1])
-    electrons.set(create_electron(), [points_1s, 0.5, speed1])
-    electrons.set(create_electron(), [points_2s, 0,speed2])
-    electrons.set(create_electron(), [points_2s,0.5, speed2])
-    electrons.set(create_electron(), [points_2p,0.5, speed_2p])
-    electrons.set(create_electron(), [points_2p, 0, speed_2p])
-    electrons.set(create_electron(), [points_2py, 0, speed_2p])
-    electrons.set(create_electron(), [points_2py, 0.5, speed_2p])
+    electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
+    electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
+    electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
+    electrons.set(create_electron(), [points_2s,0.5, speed2,'2s'])
+    electrons.set(create_electron(), [points_2p,0.5, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2p, 0, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2py, 0, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2py, 0.5, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2pz, 0, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_2pz, 0.5, speed_2p, '2p'])
+    electrons.set(create_electron(), [points_3s, 0.5, speed_3s,'3s'])
 }
 
+const electron_configurations = {
+    H: `
+        <span class="orbital-clickable" data-orbital="1s">1s<sup>1</sup></span>
+    `,
+    He: `
+        <span class="orbital-clickable" data-orbital="1s">1s<sup>2</sup></span>
+    `,
+    Li: `
+        <span class="orbital-clickable" data-orbital="1s">1s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2s">2s<sup>1</sup></span>
+    `,
+    Be: `
+        <span class="orbital-clickable" data-orbital="1s">1s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2s">2s<sup>2</sup></span>
+    `,
+    B: `
+        <span class="orbital-clickable" data-orbital="1s">1s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2s">2s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2p">2p<sup>1</sup></span>
+    `,
+    C: `
+        <span class="orbital-clickable" data-orbital="1s">1s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2s">2s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2p">2p<sup>2</sup></span>
+    `,
+    N: `
+        <span class="orbital-clickable" data-orbital="1s">1s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2s">2s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2p">2p<sup>3</sup></span>
+    `,
+    O: `
+        <span class="orbital-clickable" data-orbital="1s">1s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2s">2s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2p">2p<sup>4</sup></span>
+    `,
+    F: `
+        <span class="orbital-clickable" data-orbital="1s">1s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2s">2s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2p">2p<sup>5</sup></span>
+    `,
+    Ne: `
+        <span class="orbital-clickable" data-orbital="1s">1s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2s">2s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2p">2p<sup>6</sup></span>
+    `,
+    Na: `
+        <span class="orbital-clickable" data-orbital="1s">1s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2s">2s<sup>2</sup></span> 
+        <span class="orbital-clickable" data-orbital="2p">2p<sup>6</sup></span> 
+        <span class="orbital-clickable" data-orbital="3s">3s<sup>1</sup></span>
+    `
+};
+//updating electron configuration label in properties window
+const electron_conf = document.querySelector(".electron_conf");
+function update_electron_conf(key) {
+    electron_conf.innerHTML = electron_configurations[key];
+}
+
+properties_wraper.addEventListener('click', (event) => {
+    if (event.target.classList.contains('orbital-clickable')) {
+        const orbitalName = event.target.dataset.orbital; 
+        for(const [orb,name] of orbitals_list) {
+            if(name==orbitalName) {
+                orb.material.color.set('active_orbital_color');
+            }
+        }
+        for(const [electron,array] of electrons) {
+            if(array[3] == orbitalName) {
+                array[2] *= 10;
+            }
+            
+        }
+    }
+});
 //animation_function (used in the end)
 function animate() {
     requestAnimationFrame(animate);  
@@ -458,26 +574,33 @@ function animate() {
 }
  
 const dialog = document.querySelector('#selection_menu')
-const el_name = document.querySelector('.el_name');
-
+const el_name = document.querySelectorAll('.el_name');
+function change_title(element) {
+    for(const i of el_name) {
+        i.textContent = element;
+    } 
+}
 document.getElementById('h').addEventListener('click',() =>
 {
     dialog.close();
-    el_name.textContent = 'Hydrogen';
+    change_title("Hydrogen")
+    update_electron_conf("H")
     render_H();
 });
 
 document.getElementById('he').addEventListener('click', () =>
 {
     dialog.close();
-    el_name.textContent = 'Helium'
-    render_H();
+    change_title("Helium")
+    update_electron_conf("He")
+    render_He();
 });
 
 document.getElementById('Li').addEventListener('click',() =>
 {
     dialog.close();
-    el_name.textContent = 'Lithium'
+    change_title("Lithium")
+    update_electron_conf("Li")
     render_Li();
 });
 
@@ -486,53 +609,53 @@ document.getElementById('Li').addEventListener('click',() =>
 document.getElementById('Be').addEventListener('click', select_Be);
 function select_Be() {
     dialog.close();
-    el_name.textContent = 'Beryllium'
+    change_title("Beryllium")
     render_Be();
 }
 
 document.getElementById('B').addEventListener('click', select_B);
 function select_B() {
     dialog.close();
-    el_name.textContent = 'Boron'
+    change_title("Boron")
     render_B()
 }
 
 document.getElementById('C').addEventListener('click', () => 
 {
     dialog.close();
-    el_name.textContent = 'Carbon'
+    change_title("Carbon")
     render_C();
 });
 
 document.getElementById('N').addEventListener('click',() =>
 {
     dialog.close()
-    el_name.textContent = 'Nitrogen'
+    change_title('Nitrogen')
     render_N();
 });
 
 const O = document.getElementById('O');
 O.addEventListener('click', () => {
     dialog.close();
-    el_name.textContent = 'Oxygen'
+    change_title("Oxygen")
     render_O();
 });
 
 document.getElementById('F').addEventListener('click', () => {
     dialog.close();
-    el_name.textContent = 'Fluorine'
+    change_title("Fluorine")
     render_F();
 });
 
 document.getElementById('Ne').addEventListener('click', () => {
     dialog.close();
-    el_name.textContent = 'Neon'
+    change_title("Neon")
     render_Ne();
 });
 
 document.getElementById('Na').addEventListener('click', () => {
     dialog.close();
-    el_name.textContent = 'Natrium'
+    change_title("Natrium")
     render_Na();
 });
 

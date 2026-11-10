@@ -23,7 +23,7 @@ html, body {
     align-items: center;
     justify-content: space-between;
 }
-.el_name {
+#main_el_name{
     margin-left:20px;
     font-size: 25px;
     color:white;
@@ -52,7 +52,7 @@ html, body {
     background-color:black;
     padding: 20px;
 }
-.properties_window_wraper.hidden {
+.hidden {
     display: none;
 }
 .properties_window {
@@ -102,16 +102,12 @@ html, body {
     border:2px solid #265299;
     color: white;
 }
-#show_properties_button {
-    position: absolute;
-    height: 20px;
-    background-color: white;
-    width: 20px;
-    right:10px;
-    display: none;
-    align-items: center;
-    text-align: center;
-}
 
+#small_el_name {
+    font-size: 20px;
+    text-align: center;
+    margin-top:0;
+    margin-bottom:20px;
+}
 
  
