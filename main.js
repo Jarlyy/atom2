@@ -52,6 +52,10 @@ const electron_color = "#75aafa"
 const proton_color = "#bd112e"
 const neutron_color = "#b8bab9"
 const orbital_color = "#787b80"
+const active_orbital_color = "#73c795"
+const active_electron_color = "#4a92ff"
+const inactive_orbital_color = "#373737"
+const inactive_electron_color = "#3e4760"
 
 let electrons = new Map();
 
@@ -316,17 +320,17 @@ function render_C() {
     const l1 = create_s_orbital(15);
     const points_s1 = l1[0];
     const speed1 = l1[1];
-    orbitals_list.push(l1[2])
+    orbitals_list.set(l1[2],'1s')
     const l2 = create_s_orbital(25);
-    orbitals_list.push(l2[2])
+    orbitals_list.set(l2[2],'2s')
     const points_s2 = l2[0];
     const speed2 = l2[1];
     let l2p = create_p_orbital(20)
-    orbitals_list.push(l2p[2])
+    orbitals_list.set(l2p[2],'2p')
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
     l2p = create_p_orbital(20,'y')
-    orbitals_list.push(l2p[2])
+    orbitals_list.set(l2p[2],'2p')
     const points_2py = l2p[0]
     electrons.set(create_electron(points_s1,0), [points_s1,0, speed1,'1s'])
     electrons.set(create_electron(points_s1,0.5), [points_s1, 0.5, speed1,'1s'])
@@ -343,23 +347,23 @@ function render_N() {
     scene.clear();
     arrange_particles(7,7)
     const l1 = create_s_orbital(15);
-    orbitals_list.push(l1[2])
+    orbitals_list.set(l1[2],'1s')
     const points_1s = l1[0];
     const speed1 = l1[1];
     const l2s = create_s_orbital(25);
-      orbitals_list.push(l2s[2])
+      orbitals_list.set(l2s[2],'2s')
     const points_2s = l2s[0];
     const speed2 = l2s[1];
     let l2p = create_p_orbital(20)
-      orbitals_list.push(l2p[2])
+      orbitals_list.set(l2p[2],'2p')
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
     l2p = create_p_orbital(20,'y')
     const points_2py = l2p[0]
-      orbitals_list.push(l2p[2])
+      orbitals_list.set(l2p[2],'2p')
     l2p = create_p_orbital(20,'z')
     const points_2pz = l2p[0]
-      orbitals_list.push(l2p[2])
+      orbitals_list.set(l2p[2],'2p')
     electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
     electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
     electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
@@ -536,23 +540,39 @@ const electron_conf = document.querySelector(".electron_conf");
 function update_electron_conf(key) {
     electron_conf.innerHTML = electron_configurations[key];
 }
-
+//============================================selecting orbital
 properties_wraper.addEventListener('click', (event) => {
     if (event.target.classList.contains('orbital-clickable')) {
         const orbitalName = event.target.dataset.orbital; 
         for(const [orb,name] of orbitals_list) {
             if(name==orbitalName) {
-                orb.material.color.set('active_orbital_color');
+                orb.material.color.set(active_orbital_color);
+                console.log("set color")
+            }
+            else{
+                orb.material.color.set(inactive_orbital_color)
             }
         }
         for(const [electron,array] of electrons) {
             if(array[3] == orbitalName) {
-                array[2] *= 10;
+                electron.material.color.set(active_electron_color)
+            }
+            else{
+                electron.material.color.set(inactive_electron_color)
             }
             
         }
     }
 });
+const deselect_button = document.querySelector(".deselect_button")
+deselect_button.addEventListener("click", () => {
+    for(const [electron,array] of electrons) {
+        electron.material.color.set(electron_color);
+    }
+    for(const [orb,] of orbitals_list) {
+        orb.material.color.set(orbital_color)
+    }
+})
 //animation_function (used in the end)
 function animate() {
     requestAnimationFrame(animate);  
@@ -610,6 +630,7 @@ document.getElementById('Be').addEventListener('click', select_Be);
 function select_Be() {
     dialog.close();
     change_title("Beryllium")
+    update_electron_conf("Be")
     render_Be();
 }
 
@@ -617,6 +638,7 @@ document.getElementById('B').addEventListener('click', select_B);
 function select_B() {
     dialog.close();
     change_title("Boron")
+    update_electron_conf("B")
     render_B()
 }
 
@@ -624,6 +646,8 @@ document.getElementById('C').addEventListener('click', () =>
 {
     dialog.close();
     change_title("Carbon")
+    update_electron_conf("C")
+
     render_C();
 });
 
@@ -631,6 +655,8 @@ document.getElementById('N').addEventListener('click',() =>
 {
     dialog.close()
     change_title('Nitrogen')
+    update_electron_conf("N")
+
     render_N();
 });
 
@@ -638,26 +664,32 @@ const O = document.getElementById('O');
 O.addEventListener('click', () => {
     dialog.close();
     change_title("Oxygen")
+    update_electron_conf("O")
+
     render_O();
 });
 
 document.getElementById('F').addEventListener('click', () => {
     dialog.close();
     change_title("Fluorine")
+    update_electron_conf("F")
     render_F();
 });
 
 document.getElementById('Ne').addEventListener('click', () => {
     dialog.close();
     change_title("Neon")
+    update_electron_conf("Ne")
     render_Ne();
 });
 
 document.getElementById('Na').addEventListener('click', () => {
     dialog.close();
     change_title("Natrium")
+    update_electron_conf("Na")   
     render_Na();
 });
 
-render_H();
+render_H()
+update_electron_conf("H")
 animate()

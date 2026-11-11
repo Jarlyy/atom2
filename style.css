@@ -110,4 +110,19 @@ html, body {
     margin-bottom:20px;
 }
 
- 
+.electron_conf:hover {
+    cursor:pointer;
+    color:#c4c4c4;
+} 
+.electron_conf {
+    font-size:18px;
+    text-align:center;
+    margin-top:15px;
+}
+.deselect_button:hover {
+    cursor:pointer;
+    color:#c4c4c4;
+}
+.deselect_button {
+    float:right;
+}
