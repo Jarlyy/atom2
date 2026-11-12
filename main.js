@@ -380,14 +380,21 @@ function render_O() {
     const l1 = create_s_orbital(15);
     const points_1s = l1[0];
     const speed1 = l1[1];
+    orbitals_list.set(l1[2],'1s')
     const l2s = create_s_orbital(25);
     const points_2s = l2s[0];
     const speed2 = l2s[1];
+    orbitals_list.set(l2s[2],'2s')
     let l2p = create_p_orbital(20)
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
-    const points_2py = create_p_orbital(20,'y')[0]
-    const points_2pz = create_p_orbital(20,'z')[0]
+    orbitals_list.set(l2p[2],'2p')
+    l2p = create_p_orbital(20,'y')
+    const points_2py = l2p[0]
+    orbitals_list.set(l2p[2],'2p')
+    l2p = create_p_orbital(20,'z')
+    const points_2pz = l2p[0]
+    orbitals_list.set(l2p[2],'2p')
     electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
     electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
     electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
@@ -406,14 +413,21 @@ function render_F() {
     const l1 = create_s_orbital(15);
     const points_1s = l1[0];
     const speed1 = l1[1];
+    orbitals_list.set(l1[2],'1s')
     const l2s = create_s_orbital(25);
     const points_2s = l2s[0];
     const speed2 = l2s[1];
+    orbitals_list.set(l2s[2],'2s')
     let l2p = create_p_orbital(20)
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
-    const points_2py = create_p_orbital(20,'y')[0]
-    const points_2pz = create_p_orbital(20,'z')[0]
+    orbitals_list.set(l2p[2],'2p')
+    l2p = create_p_orbital(20,'y')
+    const points_2py = l2p[0]
+    orbitals_list.set(l2p[2],'2p')
+    l2p = create_p_orbital(20,'z')
+    const points_2pz = l2p[0]
+    orbitals_list.set(l2p[2],'2p')
     electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
     electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
     electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
@@ -433,14 +447,21 @@ function render_Ne() {
     const l1 = create_s_orbital(15);
     const points_1s = l1[0];
     const speed1 = l1[1];
+    orbitals_list.set(l1[2],'1s')
     const l2s = create_s_orbital(25);
     const points_2s = l2s[0];
     const speed2 = l2s[1];
+    orbitals_list.set(l2s[2],'2s')
     let l2p = create_p_orbital(20)
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
-    const points_2py = create_p_orbital(20,'y')[0]
-    const points_2pz = create_p_orbital(20,'z')[0]
+    orbitals_list.set(l2p[2],'2p')
+    l2p = create_p_orbital(20,'y')
+    const points_2py = l2p[0]
+    orbitals_list.set(l2p[2],'2p')
+    l2p = create_p_orbital(20,'z')
+    const points_2pz = l2p[0]
+    orbitals_list.set(l2p[2],'2p')
     electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
     electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
     electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
@@ -459,17 +480,26 @@ function render_Na() {
     const l1 = create_s_orbital(15);
     const points_1s = l1[0];
     const speed1 = l1[1];
+    orbitals_list.set(l1[2],'1s')
     const l2s = create_s_orbital(25);
     const points_2s = l2s[0];
     const speed2 = l2s[1];
+    orbitals_list.set(l2s[2],'2s')
     let l2p = create_p_orbital(20)
     const points_2p = l2p[0];
     const speed_2p = l2p[1]
-    const points_2py = create_p_orbital(15,'y')[0]
-    const points_2pz = create_p_orbital(20,'z')[0]
+    orbitals_list.set(l2p[2],'2p')
+
+    l2p = create_p_orbital(20,'y')
+    const points_2py = l2p[0]
+    orbitals_list.set(l2p[2],'2p')
+    l2p = create_p_orbital(20,'z')
+    const points_2pz = l2p[0]
+    orbitals_list.set(l2p[2],'2p')
     const l3s = create_s_orbital(35)
     const points_3s = l3s[0];
     const speed_3s = l3s[1]
+    orbitals_list.set(l3s[2],'3s')
     electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
     electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
     electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
