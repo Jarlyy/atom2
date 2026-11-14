@@ -226,292 +226,7 @@ function getRandomInt(min, max) {
 
 let orbitals_list = new Map();
 
-function render_H() {
-    electrons.clear();
-    orbitals_list.clear();
-    scene.clear();
-    // create_particle(0,0,0,proton_color)
-    arrange_particles(1,0)
-    const list = create_s_orbital(15);
-    const curve = list[0];
-    const speed = list[1]
-    orbitals_list.set(list[2],'1s')
-    electrons.set(create_electron(curve), [curve, 0,speed,'1s']);
-}
 
-function render_He() {
-    electrons.clear();
-    orbitals_list.clear();
-    scene.clear();
-    const list = create_s_orbital(15);
-    orbitals_list.set(list[2],'1s')
-    const speed = list[1];
-    const curve = list[0];
-    arrange_particles(2,2);
-    electrons.set(create_electron(curve,0), [curve, 0,speed, '1s'])
-    electrons.set(create_electron(curve,0.5), [curve, 0.5,speed, '1s'])
-}
-function render_Li() {
-    electrons.clear();
-    orbitals_list.clear();
-    scene.clear();
-    const l1 = create_s_orbital(15);
-    orbitals_list.set(l1[2],'1s')
-    const s1 = l1[0];
-    const speed1 = l1[1];
-    const l2 = create_s_orbital(25);
-    orbitals_list.set(l2[2],'2s')
-    const s2 = l2[0];
-    const speed2 = l2[1];
-    arrange_particles(3,4)
-    electrons.set(create_electron(s1,0.5), [s1, 0,speed1, '1s'])
-    electrons.set(create_electron(s1,1), [s1, 0.5, speed1,'1s'])
-    electrons.set(create_electron(s2,0), [s2, 0,speed2,'2s'])
-}
-function render_Be() {
-    electrons.clear();
-    orbitals_list.clear();
-    scene.clear();
-    arrange_particles(4,5)
-    const l1 = create_s_orbital(15);
-    const s1 = l1[0];
-    const speed1 = l1[1];
-    orbitals_list.set(l1[2],'1s')
-    const l2 = create_s_orbital(25);
-    const s2 = l2[0];
-    const speed2 = l2[1];
-    orbitals_list.set(l2[2],'2s')
-
-    electrons.set(create_electron(s1,0), [s1,0, speed1,'1s'])
-    electrons.set(create_electron(s1,0.5), [s1, 0.5, speed1,'1s'])
-    electrons.set(create_electron(s2,0), [s2, 0,speed2,'2s'])
-    electrons.set(create_electron(s2,0), [s2,0.5, speed2,'2s'])
-}
-function render_B() {
-    electrons.clear();
-    orbitals_list.clear();
-    scene.clear();
-    arrange_particles(4,5)
-    const l1 = create_s_orbital(15);
-    orbitals_list.set(l1[2],'1s')
-
-    const s1 = l1[0];
-    const speed1 = l1[1];
-    const l2 = create_s_orbital(25);
-    orbitals_list.set(l2[2],'2s')
-
-    const s2 = l2[0];
-    const speed2 = l2[1];
-    const l3 = create_p_orbital(20)
-    orbitals_list.set(l3[2],'2p')
-    const p2 = l3[0];
-    const speed_2p = l3[1]
-    electrons.set(create_electron(s1,0), [s1,0, speed1,'1s'])
-    electrons.set(create_electron(s1,0.5), [s1, 0.5, speed1,'1s'])
-    electrons.set(create_electron(s2,0), [s2, 0,speed2,'2s'])
-    electrons.set(create_electron(s2,0.5), [s2,0.5, speed2,'2s'])
-    electrons.set(create_electron(p2,0.5), [p2,0.5, speed_2p,'2p'])
-}
-function render_C() {
-    electrons.clear();
-        orbitals_list.clear();
-    scene.clear();
-    arrange_particles(6,6)
-    const l1 = create_s_orbital(15);
-    const points_s1 = l1[0];
-    const speed1 = l1[1];
-    orbitals_list.set(l1[2],'1s')
-    const l2 = create_s_orbital(25);
-    orbitals_list.set(l2[2],'2s')
-    const points_s2 = l2[0];
-    const speed2 = l2[1];
-    let l2p = create_p_orbital(20)
-    orbitals_list.set(l2p[2],'2p')
-    const points_2p = l2p[0];
-    const speed_2p = l2p[1]
-    l2p = create_p_orbital(20,'y')
-    orbitals_list.set(l2p[2],'2p')
-    const points_2py = l2p[0]
-    electrons.set(create_electron(points_s1,0), [points_s1,0, speed1,'1s'])
-    electrons.set(create_electron(points_s1,0.5), [points_s1, 0.5, speed1,'1s'])
-    electrons.set(create_electron(points_s2,0), [points_s2, 0,speed2,'2s'])
-    electrons.set(create_electron(points_s2,0.5), [points_s2,0.5, speed2,'2s'])
-    electrons.set(create_electron(), [points_2p,0, speed_2p,'2p'])
-    electrons.set(create_electron(), [points_2py,0.5, speed_2p,'2p'])
-
-
-}
-function render_N() {
-    electrons.clear();
-    orbitals_list.clear();
-    scene.clear();
-    arrange_particles(7,7)
-    const l1 = create_s_orbital(15);
-    orbitals_list.set(l1[2],'1s')
-    const points_1s = l1[0];
-    const speed1 = l1[1];
-    const l2s = create_s_orbital(25);
-      orbitals_list.set(l2s[2],'2s')
-    const points_2s = l2s[0];
-    const speed2 = l2s[1];
-    let l2p = create_p_orbital(20)
-      orbitals_list.set(l2p[2],'2p')
-    const points_2p = l2p[0];
-    const speed_2p = l2p[1]
-    l2p = create_p_orbital(20,'y')
-    const points_2py = l2p[0]
-      orbitals_list.set(l2p[2],'2p')
-    l2p = create_p_orbital(20,'z')
-    const points_2pz = l2p[0]
-      orbitals_list.set(l2p[2],'2p')
-    electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
-    electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
-    electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
-    electrons.set(create_electron(), [points_2s,0.5, speed2,'2s'])
-    electrons.set(create_electron(), [points_2p, 0, speed_2p,'2p'])
-    electrons.set(create_electron(), [points_2py, 0, speed_2p,'2p'])
-    electrons.set(create_electron(), [points_2pz, 0, speed_2p,'2p'])
-}
-
-function render_O() {
-    electrons.clear();
-    scene.clear();
-    arrange_particles(8,8)
-    const l1 = create_s_orbital(15);
-    const points_1s = l1[0];
-    const speed1 = l1[1];
-    orbitals_list.set(l1[2],'1s')
-    const l2s = create_s_orbital(25);
-    const points_2s = l2s[0];
-    const speed2 = l2s[1];
-    orbitals_list.set(l2s[2],'2s')
-    let l2p = create_p_orbital(20)
-    const points_2p = l2p[0];
-    const speed_2p = l2p[1]
-    orbitals_list.set(l2p[2],'2p')
-    l2p = create_p_orbital(20,'y')
-    const points_2py = l2p[0]
-    orbitals_list.set(l2p[2],'2p')
-    l2p = create_p_orbital(20,'z')
-    const points_2pz = l2p[0]
-    orbitals_list.set(l2p[2],'2p')
-    electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
-    electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
-    electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
-    electrons.set(create_electron(), [points_2s,0.5, speed2,'2s'])
-    electrons.set(create_electron(), [points_2p, 0, speed_2p,'2p'])
-    electrons.set(create_electron(), [points_2p, 0.5, speed_2p,'2p'])
-    electrons.set(create_electron(), [points_2py, 0, speed_2p,'2p'])
-    electrons.set(create_electron(), [points_2pz, 0, speed_2p,'2p'])
-
-
-}
-function render_F() {
-    electrons.clear();
-    scene.clear();
-    arrange_particles(9,10)
-    const l1 = create_s_orbital(15);
-    const points_1s = l1[0];
-    const speed1 = l1[1];
-    orbitals_list.set(l1[2],'1s')
-    const l2s = create_s_orbital(25);
-    const points_2s = l2s[0];
-    const speed2 = l2s[1];
-    orbitals_list.set(l2s[2],'2s')
-    let l2p = create_p_orbital(20)
-    const points_2p = l2p[0];
-    const speed_2p = l2p[1]
-    orbitals_list.set(l2p[2],'2p')
-    l2p = create_p_orbital(20,'y')
-    const points_2py = l2p[0]
-    orbitals_list.set(l2p[2],'2p')
-    l2p = create_p_orbital(20,'z')
-    const points_2pz = l2p[0]
-    orbitals_list.set(l2p[2],'2p')
-    electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
-    electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
-    electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
-    electrons.set(create_electron(), [points_2s,0.5, speed2,'2s'])
-    electrons.set(create_electron(), [points_2p, 0, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2p, 0.5, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2py, 0, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2py, 0.5, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2pz, 0, speed_2p, '2p'])
-
-
-}
-function render_Ne() {
-    electrons.clear();
-    scene.clear();
-    arrange_particles(10,10)
-    const l1 = create_s_orbital(15);
-    const points_1s = l1[0];
-    const speed1 = l1[1];
-    orbitals_list.set(l1[2],'1s')
-    const l2s = create_s_orbital(25);
-    const points_2s = l2s[0];
-    const speed2 = l2s[1];
-    orbitals_list.set(l2s[2],'2s')
-    let l2p = create_p_orbital(20)
-    const points_2p = l2p[0];
-    const speed_2p = l2p[1]
-    orbitals_list.set(l2p[2],'2p')
-    l2p = create_p_orbital(20,'y')
-    const points_2py = l2p[0]
-    orbitals_list.set(l2p[2],'2p')
-    l2p = create_p_orbital(20,'z')
-    const points_2pz = l2p[0]
-    orbitals_list.set(l2p[2],'2p')
-    electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
-    electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
-    electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
-    electrons.set(create_electron(), [points_2s,0.5, speed2,'2s'])
-    electrons.set(create_electron(), [points_2p, 0, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2p, 0.5, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2py, 0, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2py, 0.5, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2pz, 0, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2pz, 0.5, speed_2p, '2p'])
-}
-function render_Na() {
-    electrons.clear();
-    scene.clear();
-    arrange_particles(11,12)
-    const l1 = create_s_orbital(15);
-    const points_1s = l1[0];
-    const speed1 = l1[1];
-    orbitals_list.set(l1[2],'1s')
-    const l2s = create_s_orbital(25);
-    const points_2s = l2s[0];
-    const speed2 = l2s[1];
-    orbitals_list.set(l2s[2],'2s')
-    let l2p = create_p_orbital(20)
-    const points_2p = l2p[0];
-    const speed_2p = l2p[1]
-    orbitals_list.set(l2p[2],'2p')
-
-    l2p = create_p_orbital(20,'y')
-    const points_2py = l2p[0]
-    orbitals_list.set(l2p[2],'2p')
-    l2p = create_p_orbital(20,'z')
-    const points_2pz = l2p[0]
-    orbitals_list.set(l2p[2],'2p')
-    const l3s = create_s_orbital(35)
-    const points_3s = l3s[0];
-    const speed_3s = l3s[1]
-    orbitals_list.set(l3s[2],'3s')
-    electrons.set(create_electron(), [points_1s,0, speed1,'1s'])
-    electrons.set(create_electron(), [points_1s, 0.5, speed1,'1s'])
-    electrons.set(create_electron(), [points_2s, 0,speed2,'2s'])
-    electrons.set(create_electron(), [points_2s,0.5, speed2,'2s'])
-    electrons.set(create_electron(), [points_2p,0.5, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2p, 0, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2py, 0, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2py, 0.5, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2pz, 0, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_2pz, 0.5, speed_2p, '2p'])
-    electrons.set(create_electron(), [points_3s, 0.5, speed_3s,'3s'])
-}
 
 const electron_configurations = {
     H: `
@@ -622,7 +337,57 @@ function animate() {
     controls.update();
     renderer.render(scene, camera);
 }
- 
+const neutrons_number= [
+        0, 
+        0, 2, 4, 5, 6, 6, 7, 8, 10, 10,       // 1 - 10 (H - Ne)
+        12, 12, 14, 14, 16, 16, 18, 22, 20, 20, // 11 - 20 (Na - Ca)
+        24, 26, 28, 28, 30, 30, 32, 31, 35, 35, // 21 - 30 (Sc - Zn)
+        39, 41, 42, 45, 45, 48, 48, 50, 50, 51, // 31 - 40 (Ga - Zr)
+        52, 54, 55, 57, 58, 60, 61, 64, 66, 69, // 41 - 50 (Nb - Sn)
+        71, 76, 74, 77, 78, 82, 82, 82, 82, 84, // 51 - 60 (Sb - Nd)
+        84, 88, 89, 93, 94, 97, 98, 99, 100, 103, // 61 - 70 (Pm - Yb)
+        104, 106, 108, 110, 111, 114, 115, 117, 118, 121, // 71 - 80 (Lu - Hg)
+        123, 125, 126, 125, 125, 136, 136, 138, 138, 142, // 81 - 90 (Tl - Th)
+        140, 146, 144, 150, 148, 151, 150, 153, 153, 157, // 91 - 100 (Pa - Fm)
+        157, 157, 159, 163, 163, 163, 163, 169, 169, 171, // 101 - 110 (Md - Ds)
+        171, 173, 173, 175, 175, 177, 177, 176  // 111 - 118 (Rg - Og)
+    ];
+const elements = [
+  null,
+  ['H', 'Hydrogen'], ['He', 'Helium'], ['Li', 'Lithium'], ['Be', 'Beryllium'],
+  ['B', 'Boron'], ['C', 'Carbon'], ['N', 'Nitrogen'], ['O', 'Oxygen'],
+  ['F', 'Fluorine'], ['Ne', 'Neon'], ['Na', 'Sodium'], ['Mg', 'Magnesium'],
+  ['Al', 'Aluminium'], ['Si', 'Silicon'], ['P', 'Phosphorus'], ['S', 'Sulfur'],
+  ['Cl', 'Chlorine'], ['Ar', 'Argon'], ['K', 'Potassium'], ['Ca', 'Calcium'],
+  ['Sc', 'Scandium'], ['Ti', 'Titanium'], ['V', 'Vanadium'], ['Cr', 'Chromium'],
+  ['Mn', 'Manganese'], ['Fe', 'Iron'], ['Co', 'Cobalt'], ['Ni', 'Nickel'],
+  ['Cu', 'Copper'], ['Zn', 'Zinc'], ['Ga', 'Gallium'], ['Ge', 'Germanium'],
+  ['As', 'Arsenic'], ['Se', 'Selenium'], ['Br', 'Bromine'], ['Kr', 'Krypton'],
+  ['Rb', 'Rubidium'], ['Sr', 'Strontium'], ['Y', 'Yttrium'], ['Zr', 'Zirconium'],
+  ['Nb', 'Niobium'], ['Mo', 'Molybdenum'], ['Tc', 'Technetium'], ['Ru', 'Ruthenium'],
+  ['Rh', 'Rhodium'], ['Pd', 'Palladium'], ['Ag', 'Silver'], ['Cd', 'Cadmium'],
+  ['In', 'Indium'], ['Sn', 'Tin'], ['Sb', 'Antimony'], ['Te', 'Tellurium'],
+  ['I', 'Iodine'], ['Xe', 'Xenon'], ['Cs', 'Caesium'], ['Ba', 'Barium'],
+//   ['La', 'Lanthanum'], ['Ce', 'Cerium'], ['Pr', 'Praseodymium'], ['Nd', 'Neodymium'],
+//   ['Pm', 'Promethium'], ['Sm', 'Samarium'], ['Eu', 'Europium'], ['Gd', 'Gadolinium'],
+//   ['Tb', 'Terbium'], ['Dy', 'Dysprosium'], ['Ho', 'Holmium'], ['Er', 'Erbium'],
+//   ['Tm', 'Thulium'], ['Yb', 'Ytterbium'], ['Lu', 'Lutetium'], ['Hf', 'Hafnium'],
+  ['Ta', 'Tantalum'], ['W', 'Tungsten'], ['Re', 'Rhenium'], ['Os', 'Osmium'],
+  ['Ir', 'Iridium'], ['Pt', 'Platinum'], ['Au', 'Gold'], ['Hg', 'Mercury'],
+  ['Tl', 'Thallium'], ['Pb', 'Lead'], ['Bi', 'Bismuth'], ['Po', 'Polonium'],
+  ['At', 'Astatine'], ['Rn', 'Radon'], ['Fr', 'Francium'], ['Ra', 'Radium'],
+//   ['Ac', 'Actinium'], ['Th', 'Thorium'], ['Pa', 'Protactinium'], ['U', 'Uranium'],
+//   ['Np', 'Neptunium'], ['Pu', 'Plutonium'], ['Am', 'Americium'], ['Cm', 'Curium'],
+//   ['Bk', 'Berkelium'], ['Cf', 'Californium'], ['Es', 'Einsteinium'], ['Fm', 'Fermium'],
+//   ['Md', 'Mendelevium'], ['No', 'Nobelium'], ['Lr', 'Lawrencium'], ['Rf', 'Rutherfordium'],
+  ['Db', 'Dubnium'], ['Sg', 'Seaborgium'], ['Bh', 'Bohrium'], ['Hs', 'Hassium'],
+  ['Mt', 'Meitnerium'], ['Ds', 'Darmstadtium'], ['Rg', 'Roentgenium'], ['Cn', 'Copernicium'],
+  ['Nh', 'Nihonium'], ['Fl', 'Flerovium'], ['Mc', 'Moscovium'], ['Lv', 'Livermorium'],
+  ['Ts', 'Tennessine'], ['Og', 'Oganesson']
+];
+
+const neutrons_number_label = document.querySelector('.neutrons_number')
+const protons_number_label = document.querySelector('.protons_number')
 const dialog = document.querySelector('#selection_menu')
 const el_name = document.querySelectorAll('.el_name');
 function change_title(element) {
@@ -630,96 +395,73 @@ function change_title(element) {
         i.textContent = element;
     } 
 }
-document.getElementById('h').addEventListener('click',() =>
-{
-    dialog.close();
-    change_title("Hydrogen")
-    update_electron_conf("H")
-    render_H();
-});
-
-document.getElementById('he').addEventListener('click', () =>
-{
-    dialog.close();
-    change_title("Helium")
-    update_electron_conf("He")
-    render_He();
-});
-
-document.getElementById('Li').addEventListener('click',() =>
-{
-    dialog.close();
-    change_title("Lithium")
-    update_electron_conf("Li")
-    render_Li();
-});
-
-
-
-document.getElementById('Be').addEventListener('click', select_Be);
-function select_Be() {
-    dialog.close();
-    change_title("Beryllium")
-    update_electron_conf("Be")
-    render_Be();
+//==========================================================SELECTING ELEMENTS
+for(let el_index = 1; el_index < elements.length; el_index += 1) {
+    const el = elements[el_index]
+    document.getElementById(el[0]).addEventListener('click', () => {
+        render_el(el_index)
+        dialog.close();
+        change_title(el[1]);
+        update_electron_conf(el[0])
+        protons_number_label.textContent = el_index;
+        neutrons_number_label.textContent = neutrons_number[el_index]
+    });
 }
 
-document.getElementById('B').addEventListener('click', select_B);
-function select_B() {
-    dialog.close();
-    change_title("Boron")
-    update_electron_conf("B")
-    render_B()
-}
+/////////////////////////////////rendering elements
+function render_el(number) {
+    electrons.clear();
+    scene.clear();
+    
+    arrange_particles(number, neutrons_number[number])
+    const orbitals_max = [
+        { name: '1s', max: 2 },
+        { name: '2s', max: 2 }, { name: '2p', max: 6 },
+        { name: '3s', max: 2 }, { name: '3p', max: 6 },
+        { name: '4s', max: 2 }, { name: '3d', max: 10 }, { name: '4p', max: 6 },
+        { name: '5s', max: 2 }, { name: '4d', max: 10 }, { name: '5p', max: 6 },
+        { name: '6s', max: 2 }, { name: '4f', max: 14 }, { name: '5d', max: 10 }, { name: '6p', max: 6 },
+        { name: '7s', max: 2 }, { name: '5f', max: 14 }, { name: '6d', max: 10 }, { name: '7p', max: 6 }
+    ];
+    for(const orb of orbitals_max) {
+        let size = 0
+        let create_orbital = () => {}
+        let orientations = []
+        if(number > 0) {
+            if (orb.name[1] == 's') {
+                size = parseInt(orb.name[0]) * 10 + 5
+                orientations = ['y']
+                create_orbital = (size,orientation) => create_s_orbital(size,orientation);
+            }else if(orb.name[1]=='p') {
+                size = parseInt(orb.name[0]) * 10
+                orientations = ['x','y','z']
+                create_orbital = (size,orientation) => create_p_orbital(size,orientation);
+            }
+            let local_orbitals = []
+            let electrons_to_add = Math.min(number,orb.max) 
+            for(const orient of orientations) {
+                if(electrons_to_add <=0) break;
+                const l = create_orbital(size,orient)
+                const points_array = l[0]
+                const speed = l[1]
+                electrons.set(create_electron(), [points_array,0, speed,orb.name])
+                local_orbitals.push(l)
+                orbitals_list.set(l[2], orb.name)
+                electrons_to_add -= 1
+                number -= 1
+                
+            }
+            for(const orbital of local_orbitals) {
+                if (electrons_to_add <= 0) break;
+                electrons.set(create_electron(), [orbital[0],0.5,orbital[1],orb.name])
+                number -=1
+                electrons_to_add -= 1
+            }
+            
+        }
+    }
+} 
 
-document.getElementById('C').addEventListener('click', () => 
-{
-    dialog.close();
-    change_title("Carbon")
-    update_electron_conf("C")
-
-    render_C();
-});
-
-document.getElementById('N').addEventListener('click',() =>
-{
-    dialog.close()
-    change_title('Nitrogen')
-    update_electron_conf("N")
-
-    render_N();
-});
-
-const O = document.getElementById('O');
-O.addEventListener('click', () => {
-    dialog.close();
-    change_title("Oxygen")
-    update_electron_conf("O")
-
-    render_O();
-});
-
-document.getElementById('F').addEventListener('click', () => {
-    dialog.close();
-    change_title("Fluorine")
-    update_electron_conf("F")
-    render_F();
-});
-
-document.getElementById('Ne').addEventListener('click', () => {
-    dialog.close();
-    change_title("Neon")
-    update_electron_conf("Ne")
-    render_Ne();
-});
-
-document.getElementById('Na').addEventListener('click', () => {
-    dialog.close();
-    change_title("Natrium")
-    update_electron_conf("Na")   
-    render_Na();
-});
-
-render_H()
+render_el(1)
 update_electron_conf("H")
 animate()

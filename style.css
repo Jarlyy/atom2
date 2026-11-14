@@ -63,6 +63,8 @@ html, body {
     color: white;
     background-color: black;
     border:5px solid #265299;
+    display:flex;
+    flex-direction: column;
     box-sizing: border-box;
 }
 #el_selector {
@@ -74,8 +76,8 @@ html, body {
     cursor: pointer;
 }
 #selection_menu {
-    height:200px;
-    width:500px;
+    height: 595px;
+    width:540px;
     background-color: black;
     color: #8383e6;
     border-radius: 20px;
@@ -93,10 +95,15 @@ html, body {
 }
 
 .menu_el {
-    width: 20px;
+    width: 45px;
+    height: 45px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+
     
     cursor: pointer;
-    padding:10px;
     background-color: black;
     border-radius: 15%;
     border:2px solid #265299;
@@ -110,7 +117,7 @@ html, body {
     margin-bottom:20px;
 }
 
-.electron_conf:hover {
+.orbital-clickable:hover {
     cursor:pointer;
     color:#c4c4c4;
 } 
@@ -125,4 +132,25 @@ html, body {
 }
 .deselect_button {
     float:right;
+    border: 3px solid #265299;
+    padding: 5px;
+    border-radius: 10px;
+}
+.particles_number_block {
+    text-align: center;
+    justify-content: space-around;
+    display:flex;
+    flex-direction: row;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 15px;
+    border:4px solid #265299;
+}
+.deselect_button_wrapper {
+    width:100%;
+}
+.electron_conf_block {
+    border: 4px solid #265299;
+    border-radius: 20px;
+    padding: 15px;
 }
