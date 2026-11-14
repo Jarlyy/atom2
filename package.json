@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  
   "keywords": [],
   "type": "commonjs",
   "devDependencies": {
@@ -13,5 +11,12 @@
   },
   "dependencies": {
     "three": "^0.186.1"
+  },
+
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   }
+
 }
